@@ -30,7 +30,6 @@ wk.register({
       h = {
         name = "Github Utils",
         o = { "<Cmd>lua require('githubutils').open()<CR>", "Open" },
-        O = { "<Cmd>lua require('githubutils').open_remote()<CR>", "Open remote" },
         r = { "<Cmd>lua require('githubutils').repo()<CR>", "Repo" },
         p = { "<Cmd>lua require('githubutils').pulls()<CR>", "Pulls" },
         i = { "<Cmd>lua require('githubutils').issues()<CR>", "Issues" },
