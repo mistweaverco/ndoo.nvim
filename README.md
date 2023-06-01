@@ -21,7 +21,7 @@ require('lazy').setup({
 
 ## Configuration
 
-With [whichkey.nvim](https://github.com/folke/which-key.nvim):
+With [which-key.nvim](https://github.com/folke/which-key.nvim):
 
 ```lua
 wk.register({
