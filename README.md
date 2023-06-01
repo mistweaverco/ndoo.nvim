@@ -15,7 +15,7 @@ Via [lazy.nvim](https://github.com/folke/lazy.nvim):
 ```lua
 require('lazy').setup({
   -- Github Integration
-  { 'mistweaverco/githubutils', dependencies = 'nvim-telescope/telescope.nvim' },
+  { 'mistweaverco/githubutils.nvim', dependencies = 'nvim-telescope/telescope.nvim' },
 })
 ```
 
