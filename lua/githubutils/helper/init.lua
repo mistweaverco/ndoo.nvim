@@ -6,6 +6,7 @@ local telescope_action_state = require "telescope.actions.state"
 local telescope_themes = require("telescope.themes")
 local telescope_theme_dropdown = telescope_themes.get_dropdown{}
 local json = require("githubutils.helper.json")
+local pickers = require("githubutils.helper.pickers")
 
 local M = {}
 
@@ -13,64 +14,28 @@ function M.show_github_pull_picker(cb_func)
   local jsonstr = vim.fn.system("gh pr list --json number,title,body,updatedAt -L 2000")
   local pulls = json.parse(jsonstr)
 
-  telescope_pickers.new({}, {
+  pickers.generic_table_picker({
     prompt_title = "Pick a pull",
-    finder = telescope_finders.new_table {
-      results = pulls,
-      entry_maker = function(entry)
-        return {
-          value = entry.number,
-          display = entry.title,
-          ordinal = entry.title
-        }
-      end,
-    },
-    sorter = telescope_conf.generic_sorter({}),
-    attach_mappings = function(prompt_bufnr, map)
-      telescope_actions.select_default:replace(function()
-        telescope_actions.close(prompt_bufnr)
-        local selection = telescope_action_state.get_selected_entry()
-        if selection == nil then
-          cb_func(nil)
-        else
-          cb_func(selection.value)
-        end
-      end)
-      return true
-    end,
-  }):find()
+    results = pulls,
+    entry_maker_value_key = "number",
+    entry_maker_display_key = "title",
+    entry_maker_ordinal_key = "title",
+    cb_func = cb_func,
+  })
 end
 
 function M.show_github_issues_picker(cb_func)
   local jsonstr = vim.fn.system("gh issue list --json number,title,body,updatedAt -L 2000")
   local issues = json.parse(jsonstr)
 
-  telescope_pickers.new({}, {
+  pickers.generic_table_picker({
     prompt_title = "Pick an issue",
-    finder = telescope_finders.new_table {
-      results = issues,
-      entry_maker = function(entry)
-        return {
-          value = entry.number,
-          display = entry.title,
-          ordinal = entry.title
-        }
-      end,
-    },
-    sorter = telescope_conf.generic_sorter({}),
-    attach_mappings = function(prompt_bufnr, map)
-      telescope_actions.select_default:replace(function()
-        telescope_actions.close(prompt_bufnr)
-        local selection = telescope_action_state.get_selected_entry()
-        if selection == nil then
-          cb_func(nil)
-        else
-          cb_func(selection.value)
-        end
-      end)
-      return true
-    end,
-  }):find()
+    results = issues,
+    entry_maker_value_key = "number",
+    entry_maker_display_key = "title",
+    entry_maker_ordinal_key = "title",
+    cb_func = cb_func,
+  })
 end
 
 function M.get_current_git_branch()
