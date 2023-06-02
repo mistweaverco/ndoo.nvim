@@ -75,6 +75,16 @@ function M.issues()
   end)
 end
 
+function M.labels()
+  Helper.show_github_labels_picker(function(label_url)
+    if (label_url == nil) then
+      print("no label selected")
+      return
+    end
+    Helper.open_url_in_browser(label_url)
+  end)
+end
+
 function M.actions()
   show_remote_names_picker_and_open_slug("actions")
 end
