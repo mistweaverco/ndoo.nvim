@@ -48,7 +48,6 @@ function M.open()
   local filename = vim.fn.expand("%")
   local branch = Helper.get_current_git_branch()
   show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_number)
-  print(vim.inspect(filename))
 end
 
 function M.repo()
