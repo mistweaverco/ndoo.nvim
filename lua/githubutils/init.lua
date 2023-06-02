@@ -36,6 +36,21 @@ function show_remote_names_picker_and_open_slug(slug)
   end)
 end
 
+function open_from_visual_selection()
+  local line_start = vim.fn.getpos("'<")[2]
+  local line_end = vim.fn.getpos("'>")[2]
+  local filename = vim.fn.expand("%")
+  local branch = Helper.get_current_git_branch()
+  show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_start .. "-L" .. line_end)
+end
+
+function open_from_normal_mode()
+  local line_number = vim.api.nvim_win_get_cursor(0)[1]
+  local filename = vim.fn.expand("%")
+  local branch = Helper.get_current_git_branch()
+  show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_number)
+end
+
 local M = {}
 
 function M.setup()
@@ -43,11 +58,13 @@ function M.setup()
   -- in case we want to add some setup later
 end
 
-function M.open()
-  local line_number = vim.api.nvim_win_get_cursor(0)[1]
-  local filename = vim.fn.expand("%")
-  local branch = Helper.get_current_git_branch()
-  show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_number)
+function M.open(opts)
+  opts = opts or {}
+  if opts.v then
+    open_from_visual_selection()
+  else
+    open_from_normal_mode()
+  end
 end
 
 function M.repo()

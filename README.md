@@ -25,6 +25,7 @@ require('lazy').setup({
 With [which-key.nvim](https://github.com/folke/which-key.nvim):
 
 ```lua
+-- Mappings for normal mode
 wk.register({
   g = {
     name = "Goto",
@@ -39,5 +40,16 @@ wk.register({
       },
   },
 }, { prefix = "<leader>" })
+
+-- Mappings for visual mode
+wk.register({
+  g = {
+    name = "Goto",
+      h = {
+        name = "Github Utils",
+        o = { "<Cmd>lua require('githubutils').open({ v = true })<CR>", "Open" },
+      },
+  },
+}, { prefix = "<leader>", mode = "v" })
 ```
 
