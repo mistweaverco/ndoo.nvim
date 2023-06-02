@@ -11,6 +11,14 @@ function get_base_repo_url(remote)
   return Github.base_url .. repo_owner .. "/" .. repo_name
 end
 
+function open_slug(slug)
+  local base_url = get_base_repo_url()
+  if (base_url == nil) then
+    return
+  end
+  Helper.open_url_in_browser(base_url .. "/" .. slug)
+end
+
 function show_remote_names_picker_and_open_slug(slug)
   if (slug == nil) then
     slug = ""
@@ -48,11 +56,23 @@ function M.repo()
 end
 
 function M.pulls()
-  show_remote_names_picker_and_open_slug("pulls")
+  Helper.show_github_pull_picker(function(pull_number)
+    if (pull_number == nil) then
+      print("no pull selected")
+      return
+    end
+    open_slug("pull/" .. pull_number)
+  end)
 end
 
 function M.issues()
-  show_remote_names_picker_and_open_slug("issues")
+  Helper.show_github_issues_picker(function(issue_number)
+    if (issue_number == nil) then
+      print("no issue selected")
+      return
+    end
+    open_slug("issues/" .. issue_number)
+  end)
 end
 
 function M.actions()
