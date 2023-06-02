@@ -34,6 +34,8 @@ function M.show_github_pull_picker(cb_func)
     entry_maker_value_key = "number",
     entry_maker_display_key = "title",
     entry_maker_ordinal_key = "title",
+    preview = true,
+    previewer_value_key = "body",
     cb_func = cb_func,
   })
 end
@@ -48,6 +50,8 @@ function M.show_github_issues_picker(cb_func)
     entry_maker_value_key = "number",
     entry_maker_display_key = "title",
     entry_maker_ordinal_key = "title",
+    preview = true,
+    previewer_value_key = "body",
     cb_func = cb_func,
   })
 end
