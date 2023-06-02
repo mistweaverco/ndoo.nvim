@@ -40,10 +40,11 @@ of the current git repository you're in.
 ### `require('githubutils').commit()`
 
 Prompts you for a commit hash and opens up the Github web-view of
-[this commit](https://github.com/mistweaverco/githubutils.nvim).
+[this commit](https://github.com/mistweaverco/githubutils.nvim/commit/c6050edc96ebdcdf50878e88b3b2f899bb2fccb4).
 
 If you leave the prompt empty and press enter,
-The Github web-view of all commit for the current branch will be opened.
+The Github [web-view of all commits](https://github.com/mistweaverco/githubutils.nvim/commits/main)
+for the current branch will be opened.
 
 ### `require('githubutils').pulls()`
 
