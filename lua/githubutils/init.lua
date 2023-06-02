@@ -51,6 +51,16 @@ function open_from_normal_mode()
   show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_number)
 end
 
+function prompt_user_for_commit_hash_and_open_github()
+  local commit_hash = vim.fn.input("Commit hash: ")
+  if (commit_hash == nil or commit_hash == "") then
+    local branch = Helper.get_current_git_branch()
+    show_remote_names_picker_and_open_slug("commits/" .. branch)
+  else
+    show_remote_names_picker_and_open_slug("commit/" .. commit_hash)
+  end
+end
+
 local M = {}
 
 function M.setup()
@@ -103,6 +113,10 @@ end
 
 function M.actions()
   show_remote_names_picker_and_open_slug("actions")
+end
+
+function M.commit()
+  prompt_user_for_commit_hash_and_open_github()
 end
 
 return M
