@@ -10,6 +10,20 @@ local pickers = require("githubutils.helper.pickers")
 
 local M = {}
 
+function M.show_github_labels_picker(cb_func)
+  local jsonstr = vim.fn.system("gh label list --json name,description,url -L 30")
+  local pulls = json.parse(jsonstr)
+
+  pickers.generic_table_picker({
+    prompt_title = "Pick a label",
+    results = pulls,
+    entry_maker_value_key = "url",
+    entry_maker_display_key = "name",
+    entry_maker_ordinal_key = "name",
+    cb_func = cb_func,
+  })
+end
+
 function M.show_github_pull_picker(cb_func)
   local jsonstr = vim.fn.system("gh pr list --json number,title,body,updatedAt -L 2000")
   local pulls = json.parse(jsonstr)
