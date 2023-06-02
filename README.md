@@ -7,6 +7,7 @@ GithubUtils.nvim
 
 - [Neovim](https://github.com/neovim/neovim) (tested with 0.9.0)
 - [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- [Github CLI](https://cli.github.com/)
 
 ## Installation
 
