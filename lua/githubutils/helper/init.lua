@@ -10,6 +10,14 @@ local pickers = require("githubutils.helper.pickers")
 
 local M = {}
 
+function M.get_current_git_commit_hash()
+  local commit_hash = vim.fn.systemlist("git rev-parse HEAD")[1]
+  if commit_hash == "" then
+    return nil
+  end
+  return commit_hash
+end
+
 function M.show_github_labels_picker(cb_func)
   local jsonstr = vim.fn.system("gh label list --json name,description,url -L 30")
   local pulls = json.parse(jsonstr)

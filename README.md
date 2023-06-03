@@ -25,15 +25,18 @@ require('lazy').setup({
 
 ### `require('githubutils').open()`
 
-Opens up the Github Web-IDE with the current line pre-selected.
+Opens up the Github Web-IDE with the current line pre-selected (on the current branch).
 
 ![open normal mode](examples/images/open_normal_mode.gif)
 
-Can be used from visual mode when passing `{ v = true}`
+Can be used from visual mode when passing `{ v = true }`
 (`require('githubutils').open({ v = true })`) which will then pre-select
-the visually selected lines.
+the visually selected lines (on the current branch).
 
 ![open visual mode](examples/images/open_visual_mode.gif)
+
+**NOTE:** additionally `commit = true` can be passed which will open the current commit,
+rather than the current branch.
 
 ### `require('githubutils').repo()`
 
@@ -50,7 +53,7 @@ Prompts you for a commit hash and opens up the Github web-view of
 ![commit](examples/images/commit.gif)
 
 If you leave the prompt empty and press enter,
-The Github [web-view of all commits](https://github.com/mistweaverco/githubutils.nvim/commits/main)
+the Github [web-view of all commits](https://github.com/mistweaverco/githubutils.nvim/commits/main)
 for the current branch will be opened.
 
 ![commit blank](examples/images/commit_blank.gif)
@@ -94,7 +97,8 @@ wk.register({
       h = {
         name = "Github Utils",
         o = { "<Cmd>lua require('githubutils').open()<CR>", "Open" },
-        O = { "<Cmd>lua require('githubutils').repo()<CR>", "Repo" },
+        O = { "<Cmd>lua require('githubutils').open({ commit = true })<CR>", "Open commit" },
+        r = { "<Cmd>lua require('githubutils').repo()<CR>", "Repo" },
         c = { "<Cmd>lua require('githubutils').commit()<CR>", "Commit" },
         p = { "<Cmd>lua require('githubutils').pulls()<CR>", "Pulls" },
         i = { "<Cmd>lua require('githubutils').issues()<CR>", "Issues" },
@@ -111,6 +115,7 @@ wk.register({
       h = {
         name = "Github Utils",
         o = { "<Cmd>lua require('githubutils').open({ v = true })<CR>", "Open" },
+        O = { "<Cmd>lua require('githubutils').open({ v = true, commit = true })<CR>", "Open commit" },
       },
   },
 }, { prefix = "<leader>", mode = "v" })

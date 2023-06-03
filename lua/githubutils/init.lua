@@ -36,19 +36,29 @@ function show_remote_names_picker_and_open_slug(slug)
   end)
 end
 
-function open_from_visual_selection()
+function open_from_visual_selection(commit)
   local line_start = vim.fn.getpos("v")[2]
   local line_end = vim.api.nvim_win_get_cursor(0)[1]
   local filename = vim.fn.expand("%")
-  local branch = Helper.get_current_git_branch()
-  show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_start .. "-L" .. line_end)
+  if commit == nil then
+    local branch = Helper.get_current_git_branch()
+    show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_start .. "-L" .. line_end)
+  else
+    local commit_hash = Helper.get_current_git_commit_hash()
+    show_remote_names_picker_and_open_slug("blob/" .. commit_hash .. "/" .. filename .. "?plain=1#L" .. line_start .. "-L" .. line_end)
+  end
 end
 
-function open_from_normal_mode()
+function open_from_normal_mode(commit)
   local line_number = vim.api.nvim_win_get_cursor(0)[1]
   local filename = vim.fn.expand("%")
-  local branch = Helper.get_current_git_branch()
-  show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_number)
+  if commit == nil then
+    local branch = Helper.get_current_git_branch()
+    show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_number)
+  else
+    local commit_hash = Helper.get_current_git_commit_hash()
+    show_remote_names_picker_and_open_slug("blob/" .. commit_hash .. "/" .. filename .. "?plain=1#L" .. line_number)
+  end
 end
 
 function prompt_user_for_commit_hash_and_open_github()
@@ -71,9 +81,9 @@ end
 function M.open(opts)
   opts = opts or {}
   if opts.v then
-    open_from_visual_selection()
+    open_from_visual_selection(opts.commit)
   else
-    open_from_normal_mode()
+    open_from_normal_mode(opts.commit)
   end
 end
 
