@@ -16,6 +16,7 @@ function M.show_github_labels_picker(cb_func)
 
   pickers.generic_table_picker({
     prompt_title = "Pick a label",
+    dropdown = true,
     results = pulls,
     entry_maker_value_key = "url",
     entry_maker_display_key = "name",
@@ -79,25 +80,12 @@ function M.show_remote_names_picker(cb_func)
     cb_func(git_remotes[1])
     return
   end
-  telescope_pickers.new(telescope_theme_dropdown, {
+  pickers.generic_table_picker({
     prompt_title = "Pick a remote",
-    finder = telescope_finders.new_table {
-      results = git_remotes,
-    },
-    sorter = telescope_conf.generic_sorter({}),
-    attach_mappings = function(prompt_bufnr, map)
-      telescope_actions.select_default:replace(function()
-        telescope_actions.close(prompt_bufnr)
-        local selection = telescope_action_state.get_selected_entry()
-        if selection == nil then
-          cb_func(nil)
-        else
-          cb_func(selection[1])
-        end
-      end)
-      return true
-    end,
-  }):find()
+    dropdown = true,
+    results = git_remotes,
+    cb_func = cb_func,
+  })
 end
 
 function M.open_url_in_browser(url)

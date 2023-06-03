@@ -5,11 +5,46 @@ local telescope_actions = require "telescope.actions"
 local telescope_action_state = require "telescope.actions.state"
 local telescope_previewers = require "telescope.previewers"
 local telescope_utils = require('telescope.previewers.utils')
+local telescope_themes = require("telescope.themes")
+local telescope_theme_dropdown = telescope_themes.get_dropdown{}
 
 local M = {}
 
+M.generic_list_picker = function(opts, cb_func)
+  opts = opts or {}
+  opts.title = opts.title or "Pick an item"
+  local theme_config = {}
+  if opts.dropdown == true then
+    theme_config = telescope_theme_dropdown
+  end
+  telescope_pickers.new(theme_config, {
+    prompt_title = opts.title,
+    finder = telescope_finders.new_table {
+      results = opts.results,
+    },
+    sorter = telescope_conf.generic_sorter({}),
+    attach_mappings = function(prompt_bufnr, map)
+      telescope_actions.select_default:replace(function()
+        telescope_actions.close(prompt_bufnr)
+        local selection = telescope_action_state.get_selected_entry()
+        if selection == nil then
+          cb_func(nil)
+        else
+          cb_func(selection[1])
+        end
+      end)
+      return true
+    end,
+  }):find()
+end
+
 M.generic_table_picker = function(opts)
   opts = opts or {}
+
+  local theme_config = {}
+  if opts.dropdown == true then
+    theme_config = telescope_theme_dropdown
+  end
 
   local previewer = nil
 
@@ -57,7 +92,7 @@ M.generic_table_picker = function(opts)
     end,
     previewer = previewer,
   }
-  telescope_pickers.new({}, picker_config):find()
+  telescope_pickers.new(theme_config, picker_config):find()
 end
 
 return M
