@@ -98,11 +98,11 @@ end
 
 function M.open_url_in_browser(url)
   if vim.fn.has("mac") == 1 then
-    vim.fn.system("open " .. url)
+    vim.fn.system("open \"" .. url .. "\"")
   elseif vim.fn.has("unix") == 1 then
-    vim.fn.system("xdg-open " .. url)
+    vim.fn.system("xdg-open \"" .. url .. "\"")
   elseif vim.fn.has("win32") == 1 then
-    vim.fn.system("start " .. url)
+    vim.fn.system("start \"" .. url .. "\"")
   else
     print("Unsupported system")
   end
