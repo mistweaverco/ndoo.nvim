@@ -103,9 +103,9 @@ Takes you to the web-view of the issue selected.
 
 ![issues](examples/images/issues.gif)
 
-### `require('ndoo').actions()`
+### `require('ndoo').pipelines()`
 
-Takes you to the web-view of the actions.
+Takes you to the web-view of the pipelines.
 
 ![actions](examples/images/actions.gif)
 

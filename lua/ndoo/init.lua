@@ -121,7 +121,7 @@ function M.labels()
   end)
 end
 
-function M.actions()
+function M.pipelines()
   show_remote_names_picker_and_open_slug("actions")
 end
 
