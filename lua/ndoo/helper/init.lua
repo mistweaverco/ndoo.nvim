@@ -5,8 +5,8 @@ local telescope_actions = require "telescope.actions"
 local telescope_action_state = require "telescope.actions.state"
 local telescope_themes = require("telescope.themes")
 local telescope_theme_dropdown = telescope_themes.get_dropdown{}
-local json = require("githubutils.helper.json")
-local pickers = require("githubutils.helper.pickers")
+local json = require("ndoo.helper.json")
+local pickers = require("ndoo.helper.pickers")
 
 local M = {}
 
