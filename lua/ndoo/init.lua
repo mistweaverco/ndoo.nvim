@@ -1,3 +1,5 @@
+local CONFIG = require("ndoo.config")
+local JSON_CONFIG = CONFIG.get_config_json()
 local HELPER = require("ndoo.helper")
 local PORTALS = require("ndoo.portals")
 local GITHUB = require("ndoo.portals.github")
@@ -181,6 +183,10 @@ function M.issues()
       open_slug("issues/" .. issue_number)
     end)
   elseif PORTALS.is_bitbucket() then
+    if JSON_CONFIG.bitbucket_use_jira_issues ~= nil then
+      open_slug("jira")
+      return
+    end
     BITBUCKET.show_bitbucket_issues_picker(function(issue_number)
       if (issue_number == nil) then
         print("no issue selected")

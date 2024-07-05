@@ -52,6 +52,28 @@ require('lazy').setup({
 })
 ```
 
+## Configfile
+
+Create a `~/.config/ndoo/config.json` file with the following content:
+
+```json
+{
+  "bitbucket_use_jira_issues": true,
+  "bitbucket_username": "gorillamoe",
+  "bitbucket_app_password": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+The `bitbucket_use_jira_issues` key optional and only needed if you want to use the Jira integration
+in your Bitbucket repositories.
+
+The `bitbucket_username` and `bitbucket_app_password` are required for the Bitbucket integration.
+
+You can obtain the `bitbucket_app_password` by going to your Bitbucket settings and
+creating a new app password.
+
+The username is your Bitbucket username.
+
 ## Public methods
 
 ### `require('ndoo').open()`

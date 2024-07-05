@@ -4,16 +4,22 @@ local JSON_CONFIG = CONFIG.get_config_json()
 local USERNAME = JSON_CONFIG.bitbucket_username
 local APP_PASSWORD = JSON_CONFIG.bitbucket_app_password
 local BASE64_CREDS = vim.base64.encode(USERNAME .. ":" .. APP_PASSWORD)
+local REPO_OWNER = nil
+local REPO_NAME = nil
 
 local M = {}
 
 M.base_url = "https://bitbucket.org/"
-M.API_BASE_URL = "https://api.bitbucket.org"
+M.API_BASE_URL = "https://api.bitbucket.org/2.0/repositories/"
 
 local function get_data(slug)
-  local repo_owner = M.get_bitbucket_repo_owner()
-  local repo_name = M.get_bitbucket_repo_name()
-  local curl_cmd = "curl -s -X GET -H 'Authorization: Basic " .. BASE64_CREDS .. "' " .. M.API_BASE_URL .. "/2.0/repositories/" .. repo_owner .. "/" .. repo_name .. "/" .. slug
+  if REPO_OWNER == nil then
+    REPO_OWNER = M.get_bitbucket_repo_owner()
+  end
+  if REPO_NAME == nil then
+    REPO_NAME = M.get_bitbucket_repo_name()
+  end
+  local curl_cmd = "curl -s -X GET -H 'Authorization: Basic " .. BASE64_CREDS .. "' " .. M.API_BASE_URL .. REPO_OWNER .. "/" .. REPO_NAME .. "/" .. slug
   local jsonstr = vim.fn.system(curl_cmd)
   local data = vim.fn.json_decode(jsonstr)
   return data
