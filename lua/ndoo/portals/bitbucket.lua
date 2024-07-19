@@ -1,11 +1,36 @@
 local CONFIG = require("ndoo.config")
 local pickers = require("ndoo.helper.pickers")
-local JSON_CONFIG = CONFIG.get_config_json()
-local USERNAME = JSON_CONFIG.bitbucket_username
-local APP_PASSWORD = JSON_CONFIG.bitbucket_app_password
-local BASE64_CREDS = vim.base64.encode(USERNAME .. ":" .. APP_PASSWORD)
+local USERNAME = nil
+local APP_PASSWORD = nil
 local REPO_OWNER = nil
 local REPO_NAME = nil
+-- Path to the config file
+local config_path = vim.fn.expand("~/.config/ndoo/config.json")
+
+
+-- Function to check if a file exists
+local function file_exists(path)
+  local file = io.open(path, "r")
+  if file then
+    file:close()
+    return true
+  else
+    return false
+  end
+end
+
+-- Check if the config file exists
+if file_exists(config_path) then
+  local JSON_CONFIG = CONFIG.get_config_json()
+  USERNAME = JSON_CONFIG.bitbucket_username
+  APP_PASSWORD = JSON_CONFIG.bitbucket_app_password
+end
+
+-- Encode credentials if they exist
+local BASE64_CREDS = nil
+if USERNAME and APP_PASSWORD then
+  BASE64_CREDS = vim.base64.encode(USERNAME .. ":" .. APP_PASSWORD)
+end
 
 local M = {}
 
