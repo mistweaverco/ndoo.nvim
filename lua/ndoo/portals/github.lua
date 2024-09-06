@@ -102,4 +102,3 @@ function M.get_github_repo_owner(remote)
 end
 
 return M
-

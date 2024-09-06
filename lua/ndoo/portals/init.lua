@@ -35,5 +35,4 @@ M.is_github = function()
   return remote_url:match("github.com") ~= nil
 end
 
-
 return M
