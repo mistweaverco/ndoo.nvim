@@ -19,7 +19,15 @@ local function get_data(slug)
   if REPO_NAME == nil then
     REPO_NAME = M.get_bitbucket_repo_name()
   end
-  local curl_cmd = "curl -s -X GET -H 'Authorization: Basic " .. BASE64_CREDS .. "' " .. M.API_BASE_URL .. REPO_OWNER .. "/" .. REPO_NAME .. "/" .. slug
+  local curl_cmd = "curl -s -X GET -H 'Authorization: Basic "
+    .. BASE64_CREDS
+    .. "' "
+    .. M.API_BASE_URL
+    .. REPO_OWNER
+    .. "/"
+    .. REPO_NAME
+    .. "/"
+    .. slug
   local jsonstr = vim.fn.system(curl_cmd)
   local data = vim.fn.json_decode(jsonstr)
   return data
@@ -117,4 +125,3 @@ function M.get_bitbucket_repo_owner(remote)
 end
 
 return M
-

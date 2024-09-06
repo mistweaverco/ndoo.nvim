@@ -12,19 +12,19 @@ function get_base_repo_url(remote)
   if PORTALS.is_github() then
     repo_owner = GITHUB.get_github_repo_owner(remote)
     repo_name = GITHUB.get_github_repo_name(remote)
-    if (repo_owner ~= nil or repo_name ~= nil) then
+    if repo_owner ~= nil or repo_name ~= nil then
       return GITHUB.base_url .. repo_owner .. "/" .. repo_name
     end
   elseif PORTALS.is_gitlab() then
     repo_owner = GITLAB.get_gitlab_repo_owner(remote)
     repo_name = GITLAB.get_gitlab_repo_name(remote)
-    if (repo_owner ~= nil or repo_name ~= nil) then
+    if repo_owner ~= nil or repo_name ~= nil then
       return GITLAB.base_url .. repo_owner .. "/" .. repo_name
     end
   elseif PORTALS.is_bitbucket() then
     repo_owner = BITBUCKET.get_bitbucket_repo_owner(remote)
     repo_name = BITBUCKET.get_bitbucket_repo_name(remote)
-    if (repo_owner ~= nil or repo_name ~= nil) then
+    if repo_owner ~= nil or repo_name ~= nil then
       return BITBUCKET.base_url .. repo_owner .. "/" .. repo_name
     end
   end
@@ -34,23 +34,23 @@ end
 
 function open_slug(slug)
   local base_url = get_base_repo_url()
-  if (base_url == nil) then
+  if base_url == nil then
     return
   end
   HELPER.open_url_in_browser(base_url .. "/" .. slug)
 end
 
 function show_remote_names_picker_and_open_slug(slug)
-  if (slug == nil) then
+  if slug == nil then
     slug = ""
   end
   HELPER.show_remote_names_picker(function(remote)
-    if (remote == nil) then
+    if remote == nil then
       print("no remote selected")
       return
     end
     local base_url = get_base_repo_url(remote)
-    if (base_url == nil) then
+    if base_url == nil then
       return
     end
     HELPER.open_url_in_browser(base_url .. "/" .. slug)
@@ -64,20 +64,32 @@ function open_from_visual_selection(commit)
   if commit == nil then
     local branch = HELPER.get_current_git_branch()
     if PORTALS.is_github() then
-      show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_start .. "-L" .. line_end)
+      show_remote_names_picker_and_open_slug(
+        "blob/" .. branch .. "/" .. filename .. "?plain=1#L" .. line_start .. "-L" .. line_end
+      )
     elseif PORTALS.is_gitlab() then
-      show_remote_names_picker_and_open_slug("blob/" .. branch .. "/" .. filename .. "#L" .. line_start .. "-" .. line_end)
+      show_remote_names_picker_and_open_slug(
+        "blob/" .. branch .. "/" .. filename .. "#L" .. line_start .. "-" .. line_end
+      )
     elseif PORTALS.is_bitbucket() then
-      show_remote_names_picker_and_open_slug("src/" .. branch .. "/" .. filename .. "#lines-" .. line_start .. ":" .. line_end)
+      show_remote_names_picker_and_open_slug(
+        "src/" .. branch .. "/" .. filename .. "#lines-" .. line_start .. ":" .. line_end
+      )
     end
   else
     local commit_hash = HELPER.get_current_git_commit_hash()
     if PORTALS.is_github() then
-      show_remote_names_picker_and_open_slug("blob/" .. commit_hash .. "/" .. filename .. "?plain=1#L" .. line_start .. "-L" .. line_end)
+      show_remote_names_picker_and_open_slug(
+        "blob/" .. commit_hash .. "/" .. filename .. "?plain=1#L" .. line_start .. "-L" .. line_end
+      )
     elseif PORTALS.is_gitlab() then
-      show_remote_names_picker_and_open_slug("blob/" .. commit_hash .. "/" .. filename .. "#L" .. line_start .. "-" .. line_end)
+      show_remote_names_picker_and_open_slug(
+        "blob/" .. commit_hash .. "/" .. filename .. "#L" .. line_start .. "-" .. line_end
+      )
     elseif PORTALS.is_bitbucket() then
-      show_remote_names_picker_and_open_slug("src/" .. commit_hash .. "/" .. filename .. "#lines-" .. line_start .. ":" .. line_end)
+      show_remote_names_picker_and_open_slug(
+        "src/" .. commit_hash .. "/" .. filename .. "#lines-" .. line_start .. ":" .. line_end
+      )
     end
   end
 end
@@ -108,7 +120,7 @@ end
 
 function prompt_user_for_commit_hash_and_open_github()
   local commit_hash = vim.fn.input("Commit hash: ")
-  if (commit_hash == nil or commit_hash == "") then
+  if commit_hash == nil or commit_hash == "" then
     local branch = HELPER.get_current_git_branch()
     show_remote_names_picker_and_open_slug("commits/" .. branch)
   else
@@ -139,7 +151,7 @@ end
 function M.pulls()
   if PORTALS.is_github() then
     GITHUB.show_github_pull_picker(function(pull_number)
-      if (pull_number == nil) then
+      if pull_number == nil then
         print("no pull selected")
         return
       end
@@ -147,7 +159,7 @@ function M.pulls()
     end)
   elseif PORTALS.is_gitlab() then
     GITLAB.show_gitlab_pull_picker(function(pull_number)
-      if (pull_number == nil) then
+      if pull_number == nil then
         print("no pull selected")
         return
       end
@@ -155,20 +167,19 @@ function M.pulls()
     end)
   elseif PORTALS.is_bitbucket() then
     BITBUCKET.show_bitbucket_pull_picker(function(pull_number)
-      if (pull_number == nil) then
+      if pull_number == nil then
         print("no pull selected")
         return
       end
       open_slug("pull-requests/" .. pull_number)
     end)
   end
-
 end
 
 function M.issues()
   if PORTALS.is_github() then
     GITHUB.show_github_issues_picker(function(issue_number)
-      if (issue_number == nil) then
+      if issue_number == nil then
         print("no issue selected")
         return
       end
@@ -176,7 +187,7 @@ function M.issues()
     end)
   elseif PORTALS.is_gitlab() then
     GITLAB.show_gitlab_issues_picker(function(issue_number)
-      if (issue_number == nil) then
+      if issue_number == nil then
         print("no issue selected")
         return
       end
@@ -188,7 +199,7 @@ function M.issues()
       return
     end
     BITBUCKET.show_bitbucket_issues_picker(function(issue_number)
-      if (issue_number == nil) then
+      if issue_number == nil then
         print("no issue selected")
         return
       end
@@ -200,7 +211,7 @@ end
 function M.labels()
   if PORTALS.is_github() then
     GITHUB.show_github_labels_picker(function(label_url)
-      if (label_url == nil) then
+      if label_url == nil then
         print("no label selected")
         return
       end
@@ -208,7 +219,7 @@ function M.labels()
     end)
   elseif PORTALS.is_gitlab() then
     GITLAB.show_gitlab_labels_picker(function(label_url)
-      if (label_url == nil) then
+      if label_url == nil then
         print("no label selected")
         return
       end
@@ -216,7 +227,7 @@ function M.labels()
     end)
   elseif PORTALS.is_bitbucket() then
     BITBUCKET.show_bitbucket_labels_picker(function(label_url)
-      if (label_url == nil) then
+      if label_url == nil then
         print("no label selected")
         return
       end
@@ -240,4 +251,3 @@ function M.commit()
 end
 
 return M
-
