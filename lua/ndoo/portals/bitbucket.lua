@@ -7,7 +7,6 @@ local REPO_NAME = nil
 -- Path to the config file
 local config_path = vim.fn.expand("~/.config/ndoo/config.json")
 
-
 -- Function to check if a file exists
 local function file_exists(path)
   local file = io.open(path, "r")

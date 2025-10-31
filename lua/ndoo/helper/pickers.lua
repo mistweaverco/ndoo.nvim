@@ -1,4 +1,4 @@
-local fzf = require("fzf-lua")
+local table_helpers = require("ndoo.helper.table")
 
 local M = {}
 
@@ -41,6 +41,7 @@ M.generic_list_picker = function(opts, cb_func)
     return
   end
   if pcall(require, "fzf-lua") then
+    local fzf = require("fzf-lua")
     fzf.fzf_exec(opts.results, {
       prompt = opts.title .. "> ",
       actions = {
@@ -137,30 +138,39 @@ M.generic_table_picker = function(opts)
     return
   end
   if pcall(require, "fzf-lua") == true then
-    local fzf_opts = {
-      prompt = (opts.prompt_title or "Select> ") .. "> ",
-      actions = {
-        ["default"] = function(selected)
-          if selected[1] == nil then
-            opts.cb_func(nil)
-          else
-            opts.cb_func(selected[1])
-          end
-        end,
-      },
-    }
-
+    local fzf = require("fzf-lua")
     local fzf_results = {}
+    local fzf_result_values = {}
 
     for _, entry in ipairs(opts.results) do
       if type(entry) == "string" then
         table.insert(fzf_results, entry)
       else
-        table.insert(fzf_results, entry[opts.entry_maker_display_key])
+        local k = table_helpers.deep_get(entry, opts.entry_maker_display_key)
+        local v = table_helpers.deep_get(entry, opts.entry_maker_value_key)
+        if k ~= nil and v ~= nil then
+          table.insert(fzf_results, k)
+          fzf_result_values[k] = v
+        end
       end
     end
-
-    fzf.fzf_exec(fzf_results, fzf_opts)
+    fzf.fzf_exec(fzf_results, {
+      fzf_opts = {
+        ["--no-multi"] = true,
+        ["--preview-window"] = "up:1",
+      },
+      actions = {
+        ["default"] = function(selected)
+          vim.print(vim.inspect(selected))
+          if selected[1] == nil then
+            opts.cb_func(nil)
+            return
+          end
+          vim.print(vim.inspect(fzf_result_values[selected[1]]))
+          opts.cb_func(fzf_result_values[selected[1]])
+        end,
+      },
+    })
     return
   end
   vim.notify("No picker available (telescope or fzf-lua)", vim.log.levels.WARN)

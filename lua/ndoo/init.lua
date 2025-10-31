@@ -6,9 +6,9 @@ local GITHUB = require("ndoo.portals.github")
 local GITLAB = require("ndoo.portals.gitlab")
 local BITBUCKET = require("ndoo.portals.bitbucket")
 
-function get_base_repo_url(remote)
-  local repo_owner = ""
-  local repo_name = ""
+local function get_base_repo_url(remote)
+  local repo_owner
+  local repo_name
   if PORTALS.is_github() then
     repo_owner = GITHUB.get_github_repo_owner(remote)
     repo_name = GITHUB.get_github_repo_name(remote)
@@ -32,7 +32,7 @@ function get_base_repo_url(remote)
   return nil
 end
 
-function open_slug(slug)
+local function open_slug(slug)
   local base_url = get_base_repo_url()
   if base_url == nil then
     return
@@ -40,7 +40,7 @@ function open_slug(slug)
   HELPER.open_url_in_browser(base_url .. "/" .. slug)
 end
 
-function show_remote_names_picker_and_open_slug(slug)
+local function show_remote_names_picker_and_open_slug(slug)
   if slug == nil then
     slug = ""
   end
@@ -57,7 +57,7 @@ function show_remote_names_picker_and_open_slug(slug)
   end)
 end
 
-function open_from_visual_selection(commit)
+local function open_from_visual_selection(commit)
   local line_start = vim.fn.getpos("v")[2]
   local line_end = vim.api.nvim_win_get_cursor(0)[1]
   local filename = vim.fn.expand("%")
@@ -94,7 +94,7 @@ function open_from_visual_selection(commit)
   end
 end
 
-function open_from_normal_mode(commit)
+local function open_from_normal_mode(commit)
   local line_number = vim.api.nvim_win_get_cursor(0)[1]
   local filename = vim.fn.expand("%")
   if commit == nil then
@@ -118,7 +118,7 @@ function open_from_normal_mode(commit)
   end
 end
 
-function prompt_user_for_commit_hash_and_open_github()
+local function prompt_user_for_commit_hash_and_open_github()
   local commit_hash = vim.fn.input("Commit hash: ")
   if commit_hash == nil or commit_hash == "" then
     local branch = HELPER.get_current_git_branch()
@@ -166,12 +166,12 @@ function M.pulls()
       open_slug("merge_requests/" .. pull_number)
     end)
   elseif PORTALS.is_bitbucket() then
-    BITBUCKET.show_bitbucket_pull_picker(function(pull_number)
-      if pull_number == nil then
+    BITBUCKET.show_bitbucket_pull_picker(function(url)
+      if url == nil then
         print("no pull selected")
         return
       end
-      open_slug("pull-requests/" .. pull_number)
+      HELPER.open_url_in_browser(url)
     end)
   end
 end
