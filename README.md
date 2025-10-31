@@ -27,7 +27,7 @@ It gives you quick access to your Github and Bitbucket repositories from within 
 ## Requirements
 
 - [Neovim](https://github.com/neovim/neovim) (tested with 0.9.0)
-- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)
+- [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) or [fzf-lua](https://github.com/ibhagwan/fzf-lua) for pickers
 - [git](https://git-scm.com/)
 
 - For Github Integration:
@@ -40,6 +40,8 @@ It gives you quick access to your Github and Bitbucket repositories from within 
 
 Via [lazy.nvim](https://github.com/folke/lazy.nvim):
 
+with telescope.nvim:
+
 ```lua
 require('lazy').setup({
   -- Github Integration
@@ -47,6 +49,20 @@ require('lazy').setup({
     'mistweaverco/ndoo.nvim',
     dependencies = {
       'nvim-telescope/telescope.nvim'
+    }
+  },
+})
+```
+
+or with fzf-lua:
+
+```lua
+require('lazy').setup({
+  -- Github Integration
+  {
+    'mistweaverco/ndoo.nvim',
+    dependencies = {
+      'ibhagwan/fzf-lua'
     }
   },
 })
