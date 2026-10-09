@@ -18,7 +18,8 @@ Ndoo is swahili for "bucket".
 It has nothing to do with bitbucket,
 but it's a cool name for a collection of a Git-Multi-Platform Interface.
 
-It gives you quick access to your Github and Bitbucket repositories from within Neovim.
+It gives you quick access to your Github, GitLab, Bitbucket, Gitea, and Forgejo
+repositories from within Neovim.
 
 <p></p>
 
@@ -35,6 +36,11 @@ It gives you quick access to your Github and Bitbucket repositories from within 
 
 - For Bitbucket Integration:
   - [cURL](https://curl.se/)
+
+- For Gitea / Forgejo Integration:
+  - Either [tea](https://gitea.com/gitea/tea) (Gitea CLI) **or**
+    [fj](https://codeberg.org/forgejo-contrib/forgejo-cli) (Forgejo CLI).
+    ndoo uses whichever is installed; if both are present, `fj` is preferred.
 
 ## Install
 
@@ -76,19 +82,58 @@ Create a `~/.config/ndoo/config.json` file with the following content:
 {
   "bitbucket_use_jira_issues": true,
   "bitbucket_username": "gorillamoe",
-  "bitbucket_app_password": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  "bitbucket_app_password": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "gitea_hosts": ["git.example.com", "source.mycompany.io"]
 }
 ```
 
-The `bitbucket_use_jira_issues` key optional and only needed if you want to use the Jira integration
-in your Bitbucket repositories.
+### Bitbucket
 
-The `bitbucket_username` and `bitbucket_app_password` are required for the Bitbucket integration.
+The `bitbucket_use_jira_issues` key is optional and only needed if you want to
+use the Jira integration in your Bitbucket repositories.
 
-You can obtain the `bitbucket_app_password` by going to your Bitbucket settings and
-creating a new app password.
+The `bitbucket_username` and `bitbucket_app_password` are required for the
+Bitbucket integration.
 
-The username is your Bitbucket username.
+You can obtain the `bitbucket_app_password` by going to your Bitbucket settings
+and creating a new app password. The username is your Bitbucket username.
+
+### Gitea / Forgejo
+
+Authentication is handled entirely by your CLI of choice — ndoo stores no
+token. Install one:
+
+- **`fj`** (Forgejo CLI, also works with Gitea) — keyring auth:
+
+  ```sh
+  fj auth login          # OAuth
+  fj auth add-key <user> # token
+  ```
+
+- **`tea`** (Gitea CLI, also works with Forgejo) — file auth, and can act as
+  a Git credential helper:
+
+  ```sh
+  tea login add --url https://git.example.com --token xxx
+  tea login helper setup   # optional: silent git push/pull over HTTPS
+  ```
+
+If both are installed, ndoo uses `fj`. To force `tea`, uninstall or shadow
+`fj` on your PATH.
+
+## Host detection
+
+A remote is treated as Gitea/Forgejo when its hostname is:
+
+1. one of `codeberg.org`, `gitea.com`, `forgejo.org`, **or**
+2. matched by `^git.` (e.g. `git.example.com`), **or**
+3. listed in `gitea_hosts` (exact match or parent-domain match).
+
+Set `"gitea_disable_git_heuristic": true` to turn off rule 2.
+
+Both SSH (`git@host:owner/repo.git`) and HTTPS remotes are supported. SSH
+remotes default to `https://` for web URLs; HTTP remotes (including non-standard
+ports like `http://localhost:3000`) are preserved as-is.
 
 ## Public methods
 
@@ -189,4 +234,3 @@ wk.register({
   },
 }, { prefix = "<leader>", mode = "v" })
 ```
-
